@@ -1,0 +1,79 @@
+<div class=" dialog-box overflow-hidden">
+    <div class="title-bar">
+        <div>Alerts</div>
+        <div><img (click)="closeAlertDialog()" class="close-icon" src="../../assets/close-icon.svg" alt=""></div>
+    </div>
+    <div class="navigation-bar">
+        <div class="tabs-container">
+            <div [ngClass]="tab==activeTab ? 'active-tab': 'navigation-tab'" *ngFor="let tab of navbarTabs"
+                (click)="getSelectedTabData(tab)"> {{tab}}
+            </div>
+        </div>
+    </div>
+    <div class="main-container row">
+        <div class="data-view-container col-lg-7">
+            <div class="tab-heading">
+                <div class="tab-icon"></div> {{activeTab}}
+            </div>
+            <div *ngIf="activeTab==='Immunization Alerts'" class="search-pane">
+                <div> Find <input class="sarch-bar" type="text" autocomplete="off" (keyup)="filterAlertTable()"
+                        id="userName" />
+                </div>
+                <div> <button class="modal-button" (click)="deleteSelectedData()">Delete</button> </div>
+            </div>
+            <div *ngIf="activeTab==='Immunization Alerts'" class="data-table">
+                <table class="fixed-header">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" (change)="checkAllRows($event)" name="checkAll" id="checkAll">
+                            </th>
+                            <th (click)="sortTableData()" class="name">Name</th>
+                            <th (click)="sortTableData()" class="description">Description</th>
+                            <th (click)="sortTableData()" class="webReference">Web Reference</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-openSans-regular table-body">
+                        <tr *ngFor="let row of filteredAlertTableData">
+                            <td>
+                                <input type="checkbox" [checked]="isAllChecked" (change)="checkRow($event)" name=""
+                                    id={{row.id}}>
+                            </td>
+                            <ng-container *ngFor="let key of tableDataKeys">
+                                <td *ngIf="key!=='id' && key!=='webReference'" class={{key}}> {{row[key]}} </td>
+                                <td *ngIf="key=='webReference'" class='webReference-data'> {{row[key]}} </td>
+                            </ng-container>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div *ngIf="activeTab==='Immunization Alerts'" class="data-creation-container col-lg-5">
+            <div>
+                <form [formGroup]="addDataForm">
+                    <div class="add-data">
+                        <div class="label-container">
+                            <label for="name" class="data-label">Name</label>
+                            <input type="text" formControlName="dataName" class=" text-box" name="dataName"
+                                id="dataName">
+                        </div>
+                        <div class="label-container">
+                            <label for="description" class="data-label">Description</label>
+                            <input type="text" class=" text-box" formControlName="dataDescription"
+                                name="dataDescription" id="dataDescription">
+                        </div>
+                        <div class="label-container">
+                            <label for="webRef" class="data-label">Web Ref.</label>
+                            <input type="text" class=" text-box" formControlName="dataWebReference"
+                                name="dataWebReference" id="dataWebReference">
+                        </div>
+                        <button type="submit" (click)="addData(addDataForm)" class="modal-button">Add</button>
+                    </div>
+                </form>
+            </div>
+            <div class="bottom-buttons">
+                <button class="modal-button" (click)="closeAlertDialog()">Cancel</button>
+                <button class="modal-button ok-button" (click)="closeAlertDialog()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
